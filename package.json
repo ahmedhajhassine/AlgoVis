@@ -1,0 +1,28 @@
+{
+  "name": "algovis",
+  "version": "1.0.0",
+  "description": "Algorithm visualization tool for learning and teaching algorithms",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "test": "node --test",
+    "build": "echo 'Build script to be configured'",
+    "lint": "eslint src/"
+  },
+  "keywords": [
+    "algorithms",
+    "visualization",
+    "sorting",
+    "searching",
+    "graph",
+    "educational"
+  ],
+  "author": "Ahmed Haj Hassine",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^8.0.0"
+  }
+}
