@@ -1,28 +1,37 @@
 {
   "name": "algovis",
   "version": "1.0.0",
-  "description": "Algorithm visualization tool for learning and teaching algorithms",
-  "main": "src/index.js",
-  "type": "module",
+  "description": "Algorithm Visualization Platform - Full Stack",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "node --watch src/index.js",
-    "test": "node --test",
-    "build": "echo 'Build script to be configured'",
-    "lint": "eslint src/"
+    "dev": "concurrently \"npm run dev -w backend\" \"npm run dev -w frontend\"",
+    "dev:backend": "npm run dev -w backend",
+    "dev:frontend": "npm run dev -w frontend",
+    "build": "npm run build -w backend && npm run build -w frontend",
+    "build:backend": "npm run build -w backend",
+    "build:frontend": "npm run build -w frontend",
+    "lint": "npm run lint -w backend && npm run lint -w frontend"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
   },
   "keywords": [
     "algorithms",
     "visualization",
     "sorting",
     "searching",
-    "graph",
+    "graphs",
+    "dynamic-programming",
     "educational"
   ],
   "author": "Ahmed Haj Hassine",
-  "license": "MIT",
-  "dependencies": {},
-  "devDependencies": {
-    "eslint": "^8.0.0"
-  }
+  "license": "MIT"
 }
