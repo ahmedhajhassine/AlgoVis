@@ -10,6 +10,8 @@ export { bellmanFord } from './bellmanFord.js';
 export { astar } from './astar.js';
 export { kruskal } from './kruskal.js';
 export { prim } from './prim.js';
+export { depthFirstSearch } from './depthFirstSearch.js';
+export { breadthFirstSearch } from './breadthFirstSearch.js';
 
 // Index of all available graph algorithms
 export const graphAlgorithmsIndex = [

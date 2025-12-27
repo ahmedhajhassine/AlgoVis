@@ -31,3 +31,11 @@ export const searchingAlgorithmsIndex = [
     description: 'Optimized search that probes locations based on value'
   }
 ];
+
+const binarySearch = require('./binarySearch');
+const linearSearch = require('./linearSearch');
+
+module.exports = {
+  binarySearch,
+  linearSearch,
+};
