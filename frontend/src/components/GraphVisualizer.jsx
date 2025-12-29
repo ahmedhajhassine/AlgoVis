@@ -93,9 +93,13 @@ export default function GraphVisualizer({ steps, currentStep, algorithm }) {
   }, [currentStep, steps, edges])
 
   const getNodeColor = (nodeId) => {
-    if (currentNode === nodeId) return '#ef4444' // red - current
-    if (visitedNodes.has(nodeId)) return '#22c55e' // green - visited
-    return '#3b82f6' // blue - unvisited
+    // Color priority:
+    // 1. Currently being processed (red/orange)
+    // 2. Already processed/visited (green)
+    // 3. Not yet processed (gray/dark)
+    if (currentNode === nodeId) return '#f97316' // orange - currently being processed
+    if (visitedNodes.has(nodeId)) return '#22c55e' // green - already processed/visited
+    return '#6b7280' // gray - not yet processed
   }
 
   const SVG_WIDTH = 800
@@ -180,14 +184,36 @@ export default function GraphVisualizer({ steps, currentStep, algorithm }) {
       </svg>
 
       {steps.length > 0 && (
-        <div className="mt-4 p-4 bg-dark-700 rounded-lg">
-          <p className="text-gray-300 text-sm">
-            {steps[Math.min(currentStep, steps.length - 1)]?.step || 'Algorithm visualization'}
-          </p>
-          <div className="mt-2 text-xs text-gray-400">
-            <p>Visited: {visitedNodes.size} nodes</p>
-            <p>Current: {currentNode !== null ? `Node ${currentNode}` : 'None'}</p>
+        <div className="mt-4 space-y-4">
+          <div className="p-4 bg-dark-700 rounded-lg">
+            <p className="text-gray-300 text-sm">
+              {steps[Math.min(currentStep, steps.length - 1)]?.step || 'Algorithm visualization'}
+            </p>
+            <div className="mt-2 text-xs text-gray-400">
+              <p>Visited: {visitedNodes.size} nodes</p>
+              <p>Current: {currentNode !== null ? `Node ${currentNode}` : 'None'}</p>
+            </div>
           </div>
+          
+          {currentStep < steps.length - 1 && (
+            <div className="p-3 bg-dark-700/50 rounded-lg border border-white/5">
+              <p className="text-xs text-gray-400 mb-2 font-medium">Color Legend:</p>
+              <div className="flex flex-wrap gap-4 text-xs">
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 rounded-full" style={{ backgroundColor: '#f97316' }}></div>
+                  <span className="text-gray-300">Processing</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 rounded-full" style={{ backgroundColor: '#22c55e' }}></div>
+                  <span className="text-gray-300">Processed/Visited</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 rounded-full" style={{ backgroundColor: '#6b7280' }}></div>
+                  <span className="text-gray-300">Not Yet Processed</span>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>

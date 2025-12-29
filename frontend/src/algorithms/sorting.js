@@ -230,11 +230,19 @@ export const selectionSort = (arr) => {
         swapped: true,
         sorted: Array.from({ length: n }, (_, idx) => idx <= i),
       })
+    } else {
+      // Even if no swap, mark as sorted
+      steps.push({
+        array: [...array],
+        comparing: [],
+        sorted: Array.from({ length: n }, (_, idx) => idx <= i),
+      })
     }
   }
 
   steps.push({
     array: [...array],
+    comparing: [],
     sorted: Array.from({ length: n }, () => true),
   })
 
@@ -246,18 +254,37 @@ export const insertionSort = (arr) => {
   const array = [...arr]
   const n = array.length
 
+  // Initial step
+  steps.push({
+    array: [...array],
+    comparing: [],
+    sorted: Array.from({ length: n }, (_, idx) => idx === 0), // First element is considered sorted
+  })
+
   for (let i = 1; i < n; i++) {
     const key = array[i]
     let j = i - 1
 
+    // Show the key element being inserted
+    steps.push({
+      array: [...array],
+      comparing: [i],
+      sorted: Array.from({ length: n }, (_, idx) => idx < i),
+    })
+
     while (j >= 0 && array[j] > key) {
       steps.push({
         array: [...array],
-        comparing: [j, i],
+        comparing: [j, j + 1],
         sorted: Array.from({ length: n }, (_, idx) => idx < i),
       })
 
       array[j + 1] = array[j]
+      steps.push({
+        array: [...array],
+        comparing: [j, j + 1],
+        sorted: Array.from({ length: n }, (_, idx) => idx < i),
+      })
       j--
     }
 
@@ -268,6 +295,13 @@ export const insertionSort = (arr) => {
       sorted: Array.from({ length: n }, (_, idx) => idx <= i),
     })
   }
+
+  // Final step - all sorted
+  steps.push({
+    array: [...array],
+    comparing: [],
+    sorted: Array.from({ length: n }, () => true),
+  })
 
   return steps
 }

@@ -8,7 +8,7 @@ import ElementVisualizer from './ElementVisualizer'
 
 export default function AlgorithmVisualizer({ algorithm, onBack }) {
   const [isPlaying, setIsPlaying] = useState(false)
-  const [speed, setSpeed] = useState(50)
+  const [speed, setSpeed] = useState(30) // 0-100, where 0 is very slow (2000ms), 100 is very fast (10ms)
   const [arraySize, setArraySize] = useState(30)
   const [array, setArray] = useState([])
   const [steps, setSteps] = useState([])
@@ -165,13 +165,19 @@ export default function AlgorithmVisualizer({ algorithm, onBack }) {
   useEffect(() => {
     if (!isPlaying || steps.length === 0) return
 
+    // Convert speed (0-100) to delay in milliseconds using exponential scale
+    // 0 = very slow (2000ms), 50 = medium (~300ms), 100 = very fast (10ms)
+    // Using exponential scale for better control: delay = 10 + (2000 - 10) * (1 - speed/100)^2
+    const normalizedSpeed = speed / 100
+    const delay = 10 + (2000 - 10) * Math.pow(1 - normalizedSpeed, 2)
+
     const timeout = setTimeout(() => {
       if (currentStep < steps.length - 1) {
         setCurrentStep(currentStep + 1)
       } else {
         setIsPlaying(false)
       }
-    }, 101 - speed)
+    }, delay)
 
     return () => clearTimeout(timeout)
   }, [isPlaying, currentStep, speed, steps])
@@ -270,15 +276,21 @@ export default function AlgorithmVisualizer({ algorithm, onBack }) {
             </div>
 
             <div>
-              <p className="text-sm text-gray-400 mb-4 font-medium">Speed: {speed}%</p>
+              <p className="text-sm text-gray-400 mb-4 font-medium">
+                Speed: {speed === 0 ? 'Very Slow' : speed < 25 ? 'Slow' : speed < 50 ? 'Medium' : speed < 75 ? 'Fast' : 'Very Fast'} ({speed})
+              </p>
               <input
                 type="range"
-                min="1"
+                min="0"
                 max="100"
                 value={speed}
-                onChange={(e) => setSpeed(e.target.value)}
+                onChange={(e) => setSpeed(parseInt(e.target.value))}
                 className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer"
               />
+              <div className="flex justify-between text-xs text-gray-500 mt-1">
+                <span>Very Slow</span>
+                <span>Very Fast</span>
+              </div>
             </div>
 
             <div>
